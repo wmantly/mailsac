@@ -46,8 +46,10 @@ html(lang='en')
         div(ng-app="mailsac" ng-controller="GlobalController" ng-cloak)
             nav.navbar.navbar-default: .container-fluid                    
                 ul.nav.navbar-nav
-                    li: a(href="/") Mailsac
-                    
+                    li
+                        a(href="/")
+                            img(src="fs-logo.png")
+                            
                     if (menu.length)
                         li.dropdown: a.dropdown-toggle(
                             href="javascript:void(0)"
