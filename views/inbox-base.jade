@@ -18,7 +18,6 @@ block content
         )
             tbody
                 tr: td
-                    include ad-responsive
                 tr(ng-show="messages === null")
                     td.align-left(colspan="3") Loading...
                 tr(ng-show="messages && messages.length === 0")
@@ -83,4 +82,3 @@ block content
         
         
         .row
-            include ad-large-mobile
