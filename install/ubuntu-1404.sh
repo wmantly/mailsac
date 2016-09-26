@@ -1,5 +1,6 @@
 #! /bin/bash
 
+
 CONF_DIR=/etc/init
 CONF_FILE=$CONF_DIR/mailsac.conf
 LOG_FILE=/var/log/mailsac.log
