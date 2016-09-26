@@ -24,7 +24,7 @@ sudo apt-get update;
 sudo apt-get remove -y sendmail sendmail-bin postfix apache2;
 sudo apt-get purge -y postfix exim4 sendmail sendmail-bin;
 sudo apt-get install -y git curl nano build-essential python2.7 mongodb redis-server;
-curl -sL https://deb.nodesource.com/setup_0.12 | sudo -E bash -;
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -;
 sudo apt-get install -y nodejs;
 
 # Clone and setup the application
