@@ -1,7 +1,7 @@
 {
     "name": "Mailsac",
     "port": 80,
-    "baseURL": "http://fjordsoftware.lv:80",
+    "baseURL": "http://fjordsoftware.lv",
     "forceSSL": false,
     "disablePlugins": false,
     "smtpEnabled": true,
@@ -20,7 +20,7 @@
     "max_messages": 10,
     "max_message_age_days": 7,
     "removal_interval": 600000,
-    "inboxSalt": "definitely-change-this",
+    "inboxSalt": "change-this",
     "cookieMaxAge": 1209600000,
     "maxUploadSize": "5mb",
     "mongoURI": "mongodb://localhost/mailsac?authSource=admin",
