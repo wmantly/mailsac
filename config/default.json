@@ -1,5 +1,5 @@
 {
-    "name": "Mailsac",
+    "name": "Fjord Software disposable email",
     "port": 80,
     "baseURL": "http://fjordsoftware.lv",
     "forceSSL": false,
