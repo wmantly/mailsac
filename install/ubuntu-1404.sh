@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 CONF_DIR=/etc/init
 CONF_FILE=$CONF_DIR/mailsac.conf
 LOG_FILE=/var/log/mailsac.log
@@ -31,7 +30,7 @@ sudo apt-get install -y nodejs;
 # Clone and setup the application
 cd /opt;
 sudo rm -rf mailsac;
-sudo git clone https://github.com/nekaanezinu/mailsac.git mailsac --depth 1;
+sudo git clone -b beta https://github.com/nekaanezinu/mailsac.git mailsac --depth 1;
 cd mailsac;
 sudo npm i --production;
 
