@@ -67,4 +67,35 @@ router.get('/api/addresses/:email/messages', function (req, res, next) {
     });
 });
 
+router.get('/api/allmessages', function (req, res, next) {
+    req.db.Message
+    .find()
+    .select('inbox savedBy body text _id from subject received originalInbox')
+    .exec(function (err, messages) {
+        if (err) {
+            err.status = 500;
+            return next(err);
+        }
+        res.send(messages);
+    });
+});
+
+router.get('/api/delete/:email', function (req, res, next) {
+    var data = "Empty";
+    req.db.Message
+        .remove({inbox: req.params.email})
+        .exec(function (err, data) {
+            if (err) {
+                return next(err);    
+            }
+            if (!data.result.n) {
+                err = new Error('Message was not found.');
+                err.status = 404;
+                
+                return next(err);
+            }
+            res.send(data);
+        });
+});
+
 module.exports = router;
