@@ -76,15 +76,25 @@ mailsac.controller('InboxController', [
         $scope.messages = null;
         $scope.trustAsHtml = $sce.trustAsHtml;
 
-        $http
-        .get('/api/addresses/' + encodeURIComponent($scope.inbox) + '/messages')
-        .success(function (data) {
-            $scope.messages = data.sort(byReceived);
-        })
-        .error(function (err) {
-            $rootScope.notifications.push(err.data ? err.data.error : err);
-            $scope.messages = [];
-        });
+        $scope.getData = function(){
+            $http
+                .get('/api/addresses/' + encodeURIComponent($scope.inbox) + '/messages')
+                .success(function (data) {
+                $scope.messages = data.sort(byReceived);
+            })
+            .error(function (err) {
+                $rootScope.notifications.push(err.data ? err.data.error : err);
+                $scope.messages = [];
+        })};
+
+        $scope.intervalFunction = function(){
+            $timeout(function(){
+                $scope.getData();
+                $scope.intervalFunction();
+            }, 5000)
+        };
+
+        $scope.intervalFunction();
 
         $scope.deleteMessage = function (msg) {
             for (var i=0; i < $scope.messages.length; i++) {
