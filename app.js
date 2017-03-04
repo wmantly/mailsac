@@ -6,12 +6,14 @@ if (process.env.NODE_ENV !== 'production') {
     require('longjohn');
 }
 
-
+console.log('app')
 var debug = require('debug')('mailsac');
 process.on('uncaughtException', function (err) {
+    console.log(err)
     debug('PROCESS UNCAUGHT EXCEPTION', err.message, err.stack);
     // do restart immediately, to prevent massive system load
     setTimeout(function () {
+        console.log('KILLINGGGG')
         process.exit();
     }, 300);
 });
@@ -104,8 +106,11 @@ mongoose.connection.on('connected', function () {
 mongoose.connect(config.get('mongoURI'), function (err) {
     if (err) {
         debug('mongo', err);
+
     }
     schemas = require('./schemas')(mongoose);
+
+
 
     // Serving static assets
     app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -352,6 +357,7 @@ mongoose.connect(config.get('mongoURI'), function (err) {
                 setTimeout(recursiveRemoval, config.get('removal_interval'));
             });
     };
+
     if (config.get('removal_interval')) {
         recursiveRemoval();
     }

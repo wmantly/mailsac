@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var config = require('config');
 var debug = require('debug')('mailsac-home-routes');
+var dns = require('dns');
 
 /**
  * Homepage
@@ -11,12 +12,114 @@ router.get('/', function routeGetIndexHomepage(req, res) {
     res.render('index', { title: config.get('name') });
 });
 
+// needs to go, make SPA!
 router.get('/inbox/:email', function routeGetInboxEmail(req, res, next) {
     res.render('inbox-base', {
         title: req.params.email,
         email: req.params.email
     });
 });
+
+// domain API, move to another file
+
+// list all
+router.get('/api/domain', function(req, res, next){
+    
+    req.db.Domain
+        .find(function(error, data){
+            if(error){
+                res.status(500);
+                res.json({
+                    error: error
+                });
+                return res.end()
+            }else{
+                res.send(data);
+                return res.end();
+            }
+        });
+});
+
+
+// add domain
+router.post('/api/domain/:domain', function(req, res, nex){
+    var checkIp = '45.55.137.217';
+
+    req.db.Domain.find().where('domain', req.params.domain).exec(function(err, items){
+        if(items.length === 0){
+            dns.resolveMx(req.params.domain, function(error, data){
+                if(error || data.length === 0){
+                    res.status(400);
+                    res.json({
+                        domain: req.params.domain,
+                        error: error || "no record found"
+                    });
+                    return res.end();
+                }
+                var exchange = data[0].exchange;
+
+                if(!exchange.match(/\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}/)){
+
+                    dns.lookup(exchange, function(error, ip, family){
+
+                        if(ip === checkIp){
+                            console.log('ip checks out!')
+
+                            var rec = new req.db.Domain({
+                                domain: req.params.domain,
+                                is_active: true
+                            }).save(function(error, item){
+                                if(error){
+                                    res.status(500);
+                                    res.json({
+                                        error: error
+                                    });
+                                    return res.end();
+                                }
+
+                                res.json(item);
+                                return res.end();
+                            });
+
+                        }else{
+                            res.status(400);
+                            res.json({
+                                domain_ip: ip,
+                                servers_ip: checkIp,
+                                domain: req.params.domain,
+                                error: "Domain MX record does not match this servers IP"
+                            });
+                            return res.end();
+                        }
+                    });
+                }else{
+                    res.status(400);
+                    res.json({
+                        domain: res.params.domain,
+                        error: "MX record does not point to FQDN"
+                    });
+                    return res.end
+                }
+            });
+        }else{
+            return res
+                .status(409)
+                .json({
+                    domain: req.params.domain,
+                    error: 'Domain already exist.'
+                })
+                .end();
+        }
+    });
+
+        
+
+});
+
+// delete domain
+router.delete('/api/domain/:domain', function(req, res, next){});
+
+// message API, move to another file
 router.get(['/dirty/:messageId/', '/raw/:messageId'], function routeGetDirtyOrRawMsg(req, res, next) {
     req.db.Message
         .findById(req.params.messageId)

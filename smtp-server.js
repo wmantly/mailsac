@@ -66,8 +66,6 @@ module.exports = function smtpFactory(mongoose, smtp, run_port, hooks) {
 
             debug('message was parsed');
 
-            new Message(cleanupMessage(parsedMessage)).save(onCreateNewMessage);
-
             function onCreateNewMessage(err, item) {
                 if (err) {
                     debug('SAVE EMAIL FAIL', err.message, err.stack, '\n', parsedMessage);
@@ -83,6 +81,8 @@ module.exports = function smtpFactory(mongoose, smtp, run_port, hooks) {
                     });
                 }
             }
+            console.log('message to save',cleanupMessage(parsedMessage))
+            new Message(cleanupMessage(parsedMessage)).save(onCreateNewMessage);
         });
     };
 

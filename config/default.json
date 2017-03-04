@@ -1,7 +1,7 @@
 {
     "name": "Fjord Software disposable email",
-    "port": 80,
-    "baseURL": "http://fjordsoftware.lv",
+    "port": 3025,
+    "baseURL": "http://fjordsoftware.lv", // wonder what this does
     "forceSSL": false,
     "disablePlugins": false,
     "smtpEnabled": true,

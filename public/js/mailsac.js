@@ -28,7 +28,9 @@ mailsac.directive('msEnter', function () {
     };
 });
 
-mailsac.controller('GlobalController', ['$rootScope', function ($rootScope) {
+mailsac.controller(
+    'GlobalController', 
+    ['$rootScope', function ($rootScope) {
     $rootScope.unreadCounter = 0;
     $rootScope.notifications = [];
     $rootScope.path = window.location.pathname;
@@ -42,9 +44,34 @@ mailsac.controller('GlobalController', ['$rootScope', function ($rootScope) {
             return;
         }
         if (!postfix) postfix = '@mailsac.com';
+        postfix = '@'+postfix;
         window.open('/inbox/' + prefix + postfix, '_self');
     };
+
 }]);
+
+mailsac.controller('PickEmail', ['$rootScope', '$scope',function($rootScope, $scope){
+    $scope.domains = [
+        { name: 'wmantly.info', selected: 'selected' },
+        { name: 'byteprojects.co' },
+    ]
+
+    $scope.setRandomEmail = function(){
+        $scope.myinbox = [
+            chance.first(), '_',
+            chance.word(),
+            chance.d10(),
+            chance.hash({length:6})
+        ].join('');
+
+        $scope.domains.push({name: 'byte.co'})
+        
+    };
+
+    // $scope.postfix = $scope.domains[0].name
+    // $scope.setRandomEmail()
+}]);
+
 
 mailsac.controller('DashController', ['$rootScope', '$scope', '$log', '$http', function ($rootScope, $scope, $log, $http) {
     $scope.checkEmail = '';
@@ -67,6 +94,7 @@ mailsac.controller('DashController', ['$rootScope', '$scope', '$log', '$http', f
             $scope.emailIsOk = false;
         }
     };
+
 }]);
 
 mailsac.controller('InboxController', [
@@ -127,7 +155,7 @@ mailsac.controller('InboxController', [
             })
             .error(function (err) {
                 $rootScope.notifications.push(err.message || err.error);
-                // change it back
+                // change it backnavToInbox
                 $scope.messages[$index].savedBy = !$scope.messages[$index].savedBy;
             });
         };

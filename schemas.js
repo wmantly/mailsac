@@ -3,9 +3,19 @@ module.exports = function (mongoose) {
 
     var schemas = {};
 
+
     /**
-     * Message model
-     */
+    * domain model
+    */
+    var DomainSchema = new mongoose.Schema({
+
+        domain: { type: String, unique: true },
+        is_active: Boolean
+    });
+
+    /**
+    * Message model
+    */
     var MessageSchema = new mongoose.Schema({
         __v: {
             type: Number,
@@ -40,7 +50,10 @@ module.exports = function (mongoose) {
         received: Date,
         body: String // sanitized html
     });
+
     schemas.Message = MessageSchema;
+
+    schemas.Domain = DomainSchema;
 
     return schemas;
 };

@@ -1,21 +1,34 @@
-.choose-inbox.align-center
-    input.myinbox.form-control.align-right(
-        type="text"
-        ng-model="myinbox"
-        placeholder="anything"
-        ms-enter="navToInbox(myinbox, postfix)"
-        autofocus
+.choose-inbox.align-center(
+    ng-controller = "PickEmail"
+)
+
+    form.form-inline(
+        ng-view
     )
-    input.postfix.form-control(
-        type="text"
-        ng-model="postfix"
-        ng-init="postfix = '@mailsac.com'"
-        placeholder="@mailsac.com"
-        ms-enter="navToInbox(myinbox, postfix)"
-    )
-    br
-    br
-    button.btn.btn-primary(
-        ng-click="navToInbox(myinbox, postfix)"
-        ng-disabled="!myinbox || !postfix"
-    ) Check the mail!
+        div.input-group
+            span.input-group-addon(
+
+            )
+                span.glyphicon.glyphicon-refresh(
+                    ng-click = "setRandomEmail()"
+                )
+
+            input.myinbox.form-control(
+                type="text"
+                ng-model="myinbox"
+                placeholder="anything"
+                ms-enter="navToInbox(myinbox, postfix)"
+                autofocus
+            )
+            span.input-group-addon(
+            ) @
+            select.postfix.form-control.input-group-addon(
+                ng-model="postfix"
+                ng-init="postfix = postfix || domains[0].name"
+                ng-options="domain.name as domain.name for domain in domains"
+            )
+            span.input-group-addon(
+                ng-click="navToInbox(myinbox, postfix)"
+                ng-disabled="!myinbox || !postfix"
+            
+            ) Check the mail!
